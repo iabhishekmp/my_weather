@@ -4,3 +4,4 @@ linter:
     public_member_api_docs: false
     always_use_package_imports: false
     prefer_relative_imports: true
+    one_member_abstracts: false
