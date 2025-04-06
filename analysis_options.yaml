@@ -1,7 +1,16 @@
 include: package:very_good_analysis/analysis_options.yaml
+analyzer:
+  language:
+    strict-casts: false
+  exclude:
+    - build/**
+
 linter:
   rules:
+    file_names: false
     public_member_api_docs: false
     always_use_package_imports: false
     prefer_relative_imports: true
     one_member_abstracts: false
+    sort_constructors_first: false
+    avoid_dynamic_calls: false
