@@ -66,7 +66,9 @@ class WeatherEntity extends Equatable {
     weather:
         json['weather'] == null
             ? []
-            : List<Weather>.from(json['weather']!.map(Weather.fromJson)),
+            : List<Weather>.from(
+              json['weather']!.map((dynamic e) => Weather.fromJson(e)),
+            ),
     base: json['base'],
     main: json['main'] == null ? null : Main.fromJson(json['main']),
     visibility: json['visibility'],

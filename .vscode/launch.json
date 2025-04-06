@@ -4,19 +4,31 @@
     {
       "name": "my_weather",
       "request": "launch",
-      "type": "dart"
+      "type": "dart",
+      "args": [
+        "--dart-define",
+        "API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      ]
     },
     {
       "name": "my_weather (profile mode)",
       "request": "launch",
       "type": "dart",
-      "flutterMode": "profile"
+      "flutterMode": "profile",
+      "args": [
+        "--dart-define",
+        "API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      ]
     },
     {
       "name": "my_weather (release mode)",
       "request": "launch",
       "type": "dart",
-      "flutterMode": "release"
+      "flutterMode": "release",
+      "args": [
+        "--dart-define",
+        "API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      ]
     }
   ]
 }

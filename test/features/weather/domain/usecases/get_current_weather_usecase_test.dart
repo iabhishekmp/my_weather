@@ -23,19 +23,19 @@ void main() {
   const tLon = -122.4194;
   const tUnits = 'metric';
   const tParams = Params(lat: tLat, lon: tLon, units: tUnits);
-  final tWeatherEntity = WeatherEntity(name: 'Surat');
+  const tWeatherEntity = WeatherEntity(name: 'Surat');
 
   test('should get current weather from the repository', () async {
     // Arrange
     when(
       mockWeatherRepository.getCurrentWeather(tParams),
-    ).thenAnswer((_) async => Right(tWeatherEntity));
+    ).thenAnswer((_) async => const Right(tWeatherEntity));
 
     // Act
     final result = await usecase(tParams);
 
     // Assert
-    expect(result, Right<Failure, WeatherEntity>(tWeatherEntity));
+    expect(result, const Right<Failure, WeatherEntity>(tWeatherEntity));
     verify(mockWeatherRepository.getCurrentWeather(tParams));
     verifyNoMoreInteractions(mockWeatherRepository);
   });

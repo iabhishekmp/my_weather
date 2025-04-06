@@ -1,15 +1,18 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
+
+import '../utils/logger.dart';
 
 class LocationServices {
   LocationServices._();
 
-  static Future<Position> getCurrentLocation() async {
+  static Future<Either<String, Position>> getCurrentLocation() async {
     try {
       final isLocationServiceEnabled =
           await Geolocator.isLocationServiceEnabled();
       if (!isLocationServiceEnabled) {
-        throw const LocationServiceDisabledException();
+        return const Left('Location services are disabled.');
       }
 
       // Check and request location permissions
@@ -17,25 +20,22 @@ class LocationServices {
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          throw const PermissionDeniedException(
-            'Location permission is denied.',
-          );
+          return const Left('Location permissions are denied.');
         }
       }
 
       if (permission == LocationPermission.deniedForever) {
-        throw const PermissionDeniedException(
+        return const Left(
           'Location permission is permanently denied. Please enable them in settings.',
         );
       }
 
-      // Get the current position
-      return await Geolocator.getCurrentPosition(
-        locationSettings: _getSettings(),
+      return Right(
+        await Geolocator.getCurrentPosition(locationSettings: _getSettings()),
       );
-    } catch (e) {
-      // Handle and rethrow exceptions
-      throw Exception('Failed to get current location: $e');
+    } on Exception catch (e, st) {
+      logger.e(e, stackTrace: st);
+      return Left('Failed to get current location: $e');
     }
   }
 

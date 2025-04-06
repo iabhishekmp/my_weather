@@ -1,6 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../features/weather/data/datasources/weather_datasource.dart';
+import '../../features/weather/data/repositories/weather_repo_impl.dart';
+import '../../features/weather/domain/usecases/get_current_weather_usecase.dart';
+import '../../features/weather/presentation/cubit/weather_cubit.dart';
 import 'injector.dart';
 
 final getIt = GetIt.instance;
@@ -16,5 +20,15 @@ void configureDependencies() {
               LogInterceptor(requestBody: true, responseBody: true),
             ]),
     )
-    ..registerLazySingleton(() => ApiHelper(getIt<Dio>()));
+    ..registerLazySingleton(() => ApiHelper(getIt<Dio>()))
+    ..registerLazySingleton(() => WeatherDatasourceImpl(getIt<ApiHelper>()))
+    ..registerLazySingleton(
+      () => WeatherRepositoryImpl(getIt<WeatherDatasourceImpl>()),
+    )
+    ..registerLazySingleton(
+      () => GetCurrentWeatherUsecase(getIt<WeatherRepositoryImpl>()),
+    )
+    ..registerLazySingleton(
+      () => WeatherCubit(getIt<GetCurrentWeatherUsecase>()),
+    );
 }

@@ -27,8 +27,10 @@ class WeatherRepositoryImpl extends WeatherRepository {
       return Right(res);
     } on TooManyRequestsException {
       return Left(TooManyRequestsFailure());
-    } on Exception {
+    } on Exception catch (_) {
       return Left(ServerFailure());
+    } catch (_) {
+      return Left(SomethingWrong());
     }
   }
 }
