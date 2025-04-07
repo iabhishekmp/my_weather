@@ -49,12 +49,13 @@ class WeatherDatasourceImpl implements WeatherDatasource {
   Future<List<GeoDirectCityEntity>> getCities(
     GetGeoDirectCityModel model,
   ) async {
-    final List<dynamic> res = await _apiHelper.execute(
+    final res = await _apiHelper.execute(
       method: Method.get,
       url: ApiUrls.geoDirect,
       queryParameters: {'q': model.query, 'limit': model.limit},
     );
+    if (res == null) return [];
 
-    return List.from(res.map((e) => GeoDirectCityEntity.fromJson(e)));
+    return List.from(res.map((dynamic e) => GeoDirectCityEntity.fromJson(e)));
   }
 }

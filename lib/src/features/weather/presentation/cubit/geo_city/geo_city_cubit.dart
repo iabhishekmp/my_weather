@@ -32,7 +32,9 @@ class GeoCityCubit extends Cubit<GeoCityState> {
         );
       },
       (cities) {
-        emit(state.copyWith(isLoading: false, cities: cities));
+        emit(
+          state.copyWith(isLoading: false, cities: cities, hasSearched: true),
+        );
       },
     );
   }

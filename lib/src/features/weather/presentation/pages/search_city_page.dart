@@ -47,8 +47,18 @@ class SearchCityPage extends StatelessWidget {
                   if (state.isLoading) {
                     return const Center(child: CircularProgressIndicator());
                   }
+                  if (state.hasSearched) {
+                    if (state.cities == null || state.cities!.isEmpty) {
+                      return const Center(
+                        child: Text(
+                          'No cities found',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      );
+                    }
+                  }
                   if (state.cities == null || state.cities!.isEmpty) {
-                    return const Center(child: Text('No cities found'));
+                    return const SizedBox.shrink();
                   }
                   return ListView.builder(
                     itemCount: state.cities!.length,
