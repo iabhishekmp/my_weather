@@ -1,12 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/errors/failures.dart';
-import '../../../../core/services/location_services.dart';
-import '../../domain/entities/forecast_entity.dart';
-import '../../domain/entities/weather_entity.dart';
-import '../../domain/usecases/get_current_weather_usecase.dart';
-import '../../domain/usecases/get_forecast_usecase.dart';
+import '../../../../../core/errors/failures.dart';
+import '../../../../../core/services/location_services.dart';
+import '../../../domain/entities/forecast_entity.dart';
+import '../../../domain/entities/weather_entity.dart';
+import '../../../domain/usecases/get_current_weather_usecase.dart';
+import '../../../domain/usecases/get_forecast_usecase.dart';
+import '../../../domain/usecases/usecase_params.dart';
 
 part 'weather_state.dart';
 
@@ -29,7 +30,7 @@ class WeatherCubit extends Cubit<WeatherState> {
         emit(state.copyWith(isLoading: false, error: error));
       },
       (location) async {
-        final params = Params(
+        final params = GetCurrentWeatherParams(
           lat: location.latitude,
           lon: location.longitude,
           units: units,
@@ -56,7 +57,7 @@ class WeatherCubit extends Cubit<WeatherState> {
         emit(state.copyWith(isLoading: false, error: error));
       },
       (location) async {
-        final params = Params(
+        final params = GetCurrentWeatherParams(
           lat: location.latitude,
           lon: location.longitude,
           units: units,

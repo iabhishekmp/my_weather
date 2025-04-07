@@ -172,7 +172,7 @@ void main() {
       },
     ];
     final testGeoDirectCityList =
-        tResponse.map((dynamic e) => GeoDirectCity.fromJson(e)).toList();
+        tResponse.map((dynamic e) => GeoDirectCityEntity.fromJson(e)).toList();
 
     test(
       'should return List<GeoDirectCity> when API call is successful',

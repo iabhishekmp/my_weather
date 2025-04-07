@@ -11,7 +11,7 @@ import 'package:my_weather/src/features/weather/domain/entities/forecast_entity.
 import 'package:my_weather/src/features/weather/domain/entities/weather_entity.dart';
 import 'package:my_weather/src/features/weather/domain/usecases/get_current_weather_usecase.dart';
 import 'package:my_weather/src/features/weather/domain/usecases/get_forecast_usecase.dart';
-import 'package:my_weather/src/features/weather/presentation/cubit/weather_cubit.dart';
+import 'package:my_weather/src/features/weather/presentation/cubit/weather/weather_cubit.dart';
 
 import 'weather_cubit_test.mocks.dart';
 

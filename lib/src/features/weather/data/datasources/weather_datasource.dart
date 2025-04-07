@@ -9,7 +9,7 @@ import '../models/get_weather_model.dart';
 sealed class WeatherDatasource {
   Future<WeatherEntity> getCurrentWeather(GetWeatherModel model);
   Future<ForecastEntity> getForecast(GetWeatherModel model);
-  Future<List<GeoDirectCity>> getCities(GetGeoDirectCityModel model);
+  Future<List<GeoDirectCityEntity>> getCities(GetGeoDirectCityModel model);
 }
 
 class WeatherDatasourceImpl implements WeatherDatasource {
@@ -46,13 +46,15 @@ class WeatherDatasourceImpl implements WeatherDatasource {
   }
 
   @override
-  Future<List<GeoDirectCity>> getCities(GetGeoDirectCityModel model) async {
+  Future<List<GeoDirectCityEntity>> getCities(
+    GetGeoDirectCityModel model,
+  ) async {
     final List<dynamic> res = await _apiHelper.execute(
       method: Method.get,
       url: ApiUrls.geoDirect,
       queryParameters: {'q': model.query, 'limit': model.limit},
     );
 
-    return List.from(res.map((e) => GeoDirectCity.fromJson(e)));
+    return List.from(res.map((e) => GeoDirectCityEntity.fromJson(e)));
   }
 }

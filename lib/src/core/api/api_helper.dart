@@ -22,13 +22,18 @@ class ApiHelper {
       }
       return _returnResponse(response);
     } on DioException catch (e) {
+      if (e.response == null) {
+        throw FetchDataException(
+          e.error?.toString() ?? 'Error while Communication with Server',
+        );
+      }
       return _returnResponse(e.response!);
     }
   }
 
-  Map<String, dynamic> _returnResponse(Response<dynamic> response) {
+  dynamic _returnResponse(Response<dynamic> response) {
     final code = response.statusCode;
-    final data = response.data as Map<String, dynamic>;
+    final data = response.data;
     switch (code) {
       case 200:
         return data;

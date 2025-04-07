@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../configs/injector/injector_conf.dart';
 import '../../../../core/api/api_urls.dart';
 import '../../../../core/extensions/int_datetime_extension.dart';
-import '../cubit/weather_cubit.dart';
+import '../cubit/geo_city/geo_city_cubit.dart';
+import '../cubit/weather/weather_cubit.dart';
+import 'search_city_page.dart';
 
 class CurrentWeatherPage extends StatefulWidget {
   const CurrentWeatherPage({super.key});
@@ -74,6 +77,8 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.black,
+            iconTheme: const IconThemeData(color: Colors.white),
+
             actions: [
               IconButton(
                 onPressed: _fetchWeatherData,
@@ -86,7 +91,21 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
                   style: const TextStyle(fontSize: 16, color: Colors.white70),
                 ),
               ),
-              IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder:
+                          (context) => BlocProvider(
+                            create: (context) => getIt<GeoCityCubit>(),
+                            child: const SearchCityPage(),
+                          ),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.search),
+              ),
             ],
           ),
           backgroundColor: Colors.black,

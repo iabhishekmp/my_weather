@@ -1,30 +1,30 @@
 import 'package:equatable/equatable.dart';
 
-class GeoDirectCity extends Equatable {
+class GeoDirectCityEntity extends Equatable {
   final String name;
   final LocalNames? localNames;
   final double lat;
   final double lon;
-  final String country;
-  final String state;
+  final String? country;
+  final String? state;
 
-  const GeoDirectCity({
+  const GeoDirectCityEntity({
     required this.name,
     required this.lat,
     required this.lon,
-    required this.country,
-    required this.state,
+    this.country,
+    this.state,
     this.localNames,
   });
 
-  GeoDirectCity copyWith({
+  GeoDirectCityEntity copyWith({
     String? name,
     LocalNames? localNames,
     double? lat,
     double? lon,
     String? country,
     String? state,
-  }) => GeoDirectCity(
+  }) => GeoDirectCityEntity(
     name: name ?? this.name,
     localNames: localNames ?? this.localNames,
     lat: lat ?? this.lat,
@@ -33,17 +33,18 @@ class GeoDirectCity extends Equatable {
     state: state ?? this.state,
   );
 
-  factory GeoDirectCity.fromJson(Map<String, dynamic> json) => GeoDirectCity(
-    name: json['name'],
-    localNames:
-        json['local_names'] == null
-            ? null
-            : LocalNames.fromJson(json['local_names']),
-    lat: json['lat']?.toDouble(),
-    lon: json['lon']?.toDouble(),
-    country: json['country'],
-    state: json['state'],
-  );
+  factory GeoDirectCityEntity.fromJson(Map<String, dynamic> json) =>
+      GeoDirectCityEntity(
+        name: json['name'],
+        localNames:
+            json['local_names'] == null
+                ? null
+                : LocalNames.fromJson(json['local_names']),
+        lat: json['lat']?.toDouble(),
+        lon: json['lon']?.toDouble(),
+        country: json['country'],
+        state: json['state'],
+      );
 
   Map<String, dynamic> toJson() => {
     'name': name,

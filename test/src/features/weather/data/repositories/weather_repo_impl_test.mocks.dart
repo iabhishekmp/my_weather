@@ -80,14 +80,14 @@ class MockWeatherDatasourceImpl extends _i1.Mock
           as _i5.Future<_i3.ForecastEntity>);
 
   @override
-  _i5.Future<List<_i7.GeoDirectCity>> getCities(
+  _i5.Future<List<_i7.GeoDirectCityEntity>> getCities(
     _i8.GetGeoDirectCityModel? model,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#getCities, [model]),
-            returnValue: _i5.Future<List<_i7.GeoDirectCity>>.value(
-              <_i7.GeoDirectCity>[],
+            returnValue: _i5.Future<List<_i7.GeoDirectCityEntity>>.value(
+              <_i7.GeoDirectCityEntity>[],
             ),
           )
-          as _i5.Future<List<_i7.GeoDirectCity>>);
+          as _i5.Future<List<_i7.GeoDirectCityEntity>>);
 }
