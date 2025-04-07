@@ -5,9 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import '../utils/logger.dart';
 
 class LocationServices {
-  LocationServices._();
-
-  static Future<Either<String, Position>> getCurrentLocation() async {
+  Future<Either<String, Position>> getCurrentLocation() async {
     try {
       final isLocationServiceEnabled =
           await Geolocator.isLocationServiceEnabled();
@@ -39,7 +37,7 @@ class LocationServices {
     }
   }
 
-  static LocationSettings _getSettings() {
+  LocationSettings _getSettings() {
     return switch (defaultTargetPlatform) {
       TargetPlatform.android => AndroidSettings(
         accuracy: LocationAccuracy.high,

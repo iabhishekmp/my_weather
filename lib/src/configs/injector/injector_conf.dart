@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../core/services/location_services.dart';
 import '../../features/weather/data/datasources/weather_datasource.dart';
 import '../../features/weather/data/repositories/weather_repo_impl.dart';
 import '../../features/weather/domain/usecases/get_current_weather_usecase.dart';
@@ -28,7 +29,11 @@ void configureDependencies() {
     ..registerLazySingleton(
       () => GetCurrentWeatherUsecase(getIt<WeatherRepositoryImpl>()),
     )
+    ..registerLazySingleton(LocationServices.new)
     ..registerLazySingleton(
-      () => WeatherCubit(getIt<GetCurrentWeatherUsecase>()),
+      () => WeatherCubit(
+        getIt<GetCurrentWeatherUsecase>(),
+        getIt<LocationServices>(),
+      ),
     );
 }

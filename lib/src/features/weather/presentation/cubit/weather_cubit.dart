@@ -10,12 +10,14 @@ part 'weather_state.dart';
 
 class WeatherCubit extends Cubit<WeatherState> {
   final GetCurrentWeatherUsecase _getCurrentWeather;
+  final LocationServices _locationServices;
 
-  WeatherCubit(this._getCurrentWeather) : super(WeatherInitial());
+  WeatherCubit(this._getCurrentWeather, this._locationServices)
+    : super(WeatherInitial());
 
   Future<void> getCurrentWeather({required String units}) async {
     emit(WeatherLoading());
-    final result = await LocationServices.getCurrentLocation();
+    final result = await _locationServices.getCurrentLocation();
     return result.fold(
       (error) {
         emit(WeatherError(error));
