@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 
 import '../../../../configs/injector/injector_conf.dart';
 import '../../../../core/extensions/int_datetime_extension.dart';
+import '../../domain/entities/weather_entity.dart';
 import '../../domain/usecases/get_geo_direct_cities_usecase.dart';
 import '../cubit/geo_city/geo_city_cubit.dart';
 import '../cubit/weather/weather_cubit.dart';
@@ -12,6 +13,7 @@ import '../widgets/weather_details_row.dart';
 import '../widgets/weather_forecast_list.dart';
 import '../widgets/weather_header.dart';
 import '../widgets/weather_icon_temp_section.dart';
+import 'map_page.dart';
 import 'search_city_page.dart';
 
 class WeatherDataPage extends StatefulWidget {
@@ -37,6 +39,27 @@ class _WeatherDataPageState extends State<WeatherDataPage> {
     context.read<WeatherCubit>().fetchForecast(
       units: 'metric',
       position: widget.position,
+    );
+  }
+
+  void _navigateToSearch() {
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder:
+            (context) => BlocProvider(
+              create:
+                  (context) => GeoCityCubit(getIt<GetGeoDirectCitiesUseCase>()),
+              child: const SearchCityPage(),
+            ),
+      ),
+    );
+  }
+
+  void _navigateToMap(WeatherEntity weather) {
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(builder: (context) => MapPage(weather: weather)),
     );
   }
 
@@ -80,21 +103,7 @@ class _WeatherDataPageState extends State<WeatherDataPage> {
                   ? WeatherHeader(
                     time: (weather.dt ?? 0).toDateTime(),
                     onRefresh: _fetchWeatherData,
-                    onSearch: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder:
-                              (context) => BlocProvider(
-                                create:
-                                    (context) => GeoCityCubit(
-                                      getIt<GetGeoDirectCitiesUseCase>(),
-                                    ),
-                                child: const SearchCityPage(),
-                              ),
-                        ),
-                      );
-                    },
+                    onSearch: _navigateToSearch,
                   )
                   : AppBar(
                     backgroundColor: Colors.black,
@@ -114,7 +123,25 @@ class _WeatherDataPageState extends State<WeatherDataPage> {
                       children: [
                         Expanded(
                           flex: 2,
-                          child: WeatherIconTemp(weather: weather),
+                          child: Stack(
+                            children: [
+                              WeatherIconTemp(weather: weather),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: FloatingActionButton(
+                                  onPressed: () {
+                                    _navigateToMap(weather);
+                                  },
+                                  backgroundColor: Colors.transparent,
+                                  child: const Icon(
+                                    Icons.map,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         if (forecast != null)
                           Expanded(
