@@ -4,6 +4,7 @@ class ApiUrls {
 
   static const String currentWeather = '/data/2.5/weather';
   static const String forecast = '/data/2.5/forecast';
+  static const String geoDirect = 'geo/1.0/direct';
 
   static String iconUrl(String icon) =>
       'https://openweathermap.org/img/wn/$icon@2x.png';

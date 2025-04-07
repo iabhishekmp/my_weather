@@ -6,7 +6,7 @@ class ApiHelper {
   const ApiHelper(this._dio);
   final Dio _dio;
 
-  Future<Map<String, dynamic>> execute({
+  Future<dynamic> execute({
     required String url,
     required Method method,
     Map<String, dynamic>? queryParameters,

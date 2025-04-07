@@ -18,10 +18,6 @@ class GetWeatherModel extends Equatable {
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{'lat': lat, 'lon': lon, 'units': units};
-  }
-
   @override
   String toString() => 'GetWeatherModel(lat: $lat, lon: $lon, units: $units)';
 

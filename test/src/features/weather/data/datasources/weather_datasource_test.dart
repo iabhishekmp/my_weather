@@ -4,8 +4,10 @@ import 'package:mockito/mockito.dart';
 import 'package:my_weather/src/core/api/api_helper.dart';
 import 'package:my_weather/src/core/api/api_urls.dart';
 import 'package:my_weather/src/features/weather/data/datasources/weather_datasource.dart';
+import 'package:my_weather/src/features/weather/data/models/get_geo_direct_city_model.dart';
 import 'package:my_weather/src/features/weather/data/models/get_weather_model.dart';
 import 'package:my_weather/src/features/weather/domain/entities/forecast_entity.dart';
+import 'package:my_weather/src/features/weather/domain/entities/geo_direct_city_entity.dart';
 import 'package:my_weather/src/features/weather/domain/entities/weather_entity.dart';
 
 import 'weather_datasource_test.mocks.dart';
@@ -146,6 +148,76 @@ void main() {
             'lon': testModel.lon,
             'units': testModel.units,
           },
+        ),
+      ).called(1);
+    });
+  });
+
+  group('getCities', () {
+    const tModel = GetGeoDirectCityModel(query: 'Surat', limit: 5);
+    final tResponse = [
+      {
+        'name': 'Surat',
+        'lat': 51.5074,
+        'lon': -0.1278,
+        'country': 'India',
+        'state': 'Gujarat',
+      },
+      {
+        'name': 'Surat',
+        'lat': 21.343,
+        'lon': 73.343,
+        'country': 'India',
+        'state': 'Gujarat',
+      },
+    ];
+    final testGeoDirectCityList =
+        tResponse.map((dynamic e) => GeoDirectCity.fromJson(e)).toList();
+
+    test(
+      'should return List<GeoDirectCity> when API call is successful',
+      () async {
+        // Arrange
+        when(
+          mockApiHelper.execute(
+            method: Method.get,
+            url: ApiUrls.geoDirect,
+            queryParameters: {'q': tModel.query, 'limit': tModel.limit},
+          ),
+        ).thenAnswer((_) async => tResponse);
+
+        // Act
+        final result = await datasource.getCities(tModel);
+
+        // Assert
+        expect(result, equals(testGeoDirectCityList));
+        verify(
+          mockApiHelper.execute(
+            method: Method.get,
+            url: ApiUrls.geoDirect,
+            queryParameters: {'q': tModel.query, 'limit': tModel.limit},
+          ),
+        ).called(1);
+      },
+    );
+
+    test('should throw an exception when API call fails', () async {
+      // Arrange
+      when(
+        mockApiHelper.execute(
+          method: Method.get,
+          url: ApiUrls.geoDirect,
+          queryParameters: anyNamed('queryParameters'),
+        ),
+      ).thenThrow(Exception('API error'));
+
+      // Act & Assert
+      expect(() => datasource.getCities(tModel), throwsException);
+      verify(
+        mockApiHelper.execute(
+          method: Method.get,
+          url: ApiUrls.geoDirect,
+          queryParameters: {'q': tModel.query, 'limit': tModel.limit},
         ),
       ).called(1);
     });
