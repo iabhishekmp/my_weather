@@ -1,11 +1,13 @@
 import '../../../../core/api/api_helper.dart';
 import '../../../../core/api/api_urls.dart';
 import '../../../../core/utils/logger.dart';
+import '../../domain/entities/forecast_entity.dart';
 import '../../domain/entities/weather_entity.dart';
 import '../models/get_weather_model.dart';
 
 sealed class WeatherDatasource {
   Future<WeatherEntity> getCurrentWeather(GetWeatherModel model);
+  Future<ForecastEntity> getForecast(GetWeatherModel model);
 }
 
 class WeatherDatasourceImpl implements WeatherDatasource {
@@ -26,6 +28,25 @@ class WeatherDatasourceImpl implements WeatherDatasource {
         },
       );
       return WeatherEntity.fromJson(res);
+    } catch (e, st) {
+      logger.e(e, stackTrace: st);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ForecastEntity> getForecast(GetWeatherModel model) async {
+    try {
+      final res = await _apiHelper.execute(
+        method: Method.get,
+        url: ApiUrls.forecast,
+        queryParameters: {
+          'lat': model.lat,
+          'lon': model.lon,
+          'units': model.units,
+        },
+      );
+      return ForecastEntity.fromJson(res);
     } catch (e, st) {
       logger.e(e, stackTrace: st);
       rethrow;

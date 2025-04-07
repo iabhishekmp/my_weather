@@ -3,13 +3,15 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i5;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:my_weather/src/features/weather/data/datasources/weather_datasource.dart'
-    as _i3;
+    as _i4;
 import 'package:my_weather/src/features/weather/data/models/get_weather_model.dart'
-    as _i5;
+    as _i6;
+import 'package:my_weather/src/features/weather/domain/entities/forecast_entity.dart'
+    as _i3;
 import 'package:my_weather/src/features/weather/domain/entities/weather_entity.dart'
     as _i2;
 
@@ -32,25 +34,44 @@ class _FakeWeatherEntity_0 extends _i1.SmartFake implements _i2.WeatherEntity {
     : super(parent, parentInvocation);
 }
 
+class _FakeForecastEntity_1 extends _i1.SmartFake
+    implements _i3.ForecastEntity {
+  _FakeForecastEntity_1(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
 /// A class which mocks [WeatherDatasourceImpl].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockWeatherDatasourceImpl extends _i1.Mock
-    implements _i3.WeatherDatasourceImpl {
+    implements _i4.WeatherDatasourceImpl {
   MockWeatherDatasourceImpl() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<_i2.WeatherEntity> getCurrentWeather(_i5.GetWeatherModel? model) =>
+  _i5.Future<_i2.WeatherEntity> getCurrentWeather(_i6.GetWeatherModel? model) =>
       (super.noSuchMethod(
             Invocation.method(#getCurrentWeather, [model]),
-            returnValue: _i4.Future<_i2.WeatherEntity>.value(
+            returnValue: _i5.Future<_i2.WeatherEntity>.value(
               _FakeWeatherEntity_0(
                 this,
                 Invocation.method(#getCurrentWeather, [model]),
               ),
             ),
           )
-          as _i4.Future<_i2.WeatherEntity>);
+          as _i5.Future<_i2.WeatherEntity>);
+
+  @override
+  _i5.Future<_i3.ForecastEntity> getForecast(_i6.GetWeatherModel? model) =>
+      (super.noSuchMethod(
+            Invocation.method(#getForecast, [model]),
+            returnValue: _i5.Future<_i3.ForecastEntity>.value(
+              _FakeForecastEntity_1(
+                this,
+                Invocation.method(#getForecast, [model]),
+              ),
+            ),
+          )
+          as _i5.Future<_i3.ForecastEntity>);
 }

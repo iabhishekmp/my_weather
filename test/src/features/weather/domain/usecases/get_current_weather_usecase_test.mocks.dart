@@ -8,6 +8,8 @@ import 'dart:async' as _i4;
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:my_weather/src/core/errors/failures.dart' as _i5;
+import 'package:my_weather/src/features/weather/domain/entities/forecast_entity.dart'
+    as _i8;
 import 'package:my_weather/src/features/weather/domain/entities/weather_entity.dart'
     as _i6;
 import 'package:my_weather/src/features/weather/domain/repositories/weather_repo.dart'
@@ -57,4 +59,20 @@ class MockWeatherRepository extends _i1.Mock implements _i3.WeatherRepository {
                 ),
           )
           as _i4.Future<_i2.Either<_i5.Failure, _i6.WeatherEntity>>);
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, _i8.ForecastEntity>> getForecastWeather(
+    _i7.Params? params,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#getForecastWeather, [params]),
+            returnValue:
+                _i4.Future<_i2.Either<_i5.Failure, _i8.ForecastEntity>>.value(
+                  _FakeEither_0<_i5.Failure, _i8.ForecastEntity>(
+                    this,
+                    Invocation.method(#getForecastWeather, [params]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, _i8.ForecastEntity>>);
 }

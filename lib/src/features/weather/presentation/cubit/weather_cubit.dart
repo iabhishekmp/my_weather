@@ -3,17 +3,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/errors/failures.dart';
 import '../../../../core/services/location_services.dart';
+import '../../domain/entities/forecast_entity.dart';
 import '../../domain/entities/weather_entity.dart';
 import '../../domain/usecases/get_current_weather_usecase.dart';
+import '../../domain/usecases/get_forecast_usecase.dart';
 
 part 'weather_state.dart';
 
 class WeatherCubit extends Cubit<WeatherState> {
   final GetCurrentWeatherUsecase _getCurrentWeather;
+  final GetForecastUseCase _getForecastWeather;
   final LocationServices _locationServices;
 
-  WeatherCubit(this._getCurrentWeather, this._locationServices)
-    : super(WeatherInitial());
+  WeatherCubit(
+    this._getCurrentWeather,
+    this._getForecastWeather,
+    this._locationServices,
+  ) : super(WeatherInitial());
 
   Future<void> getCurrentWeather({required String units}) async {
     emit(WeatherLoading());
@@ -32,6 +38,28 @@ class WeatherCubit extends Cubit<WeatherState> {
         result.fold(
           (failure) => emit(WeatherError(mapFailureToMessage(failure))),
           (weather) => emit(WeatherLoaded(weather)),
+        );
+      },
+    );
+  }
+
+  Future<void> getForecastWeather({required String units}) async {
+    emit(WeatherForecastLoading());
+    final result = await _locationServices.getCurrentLocation();
+    return result.fold(
+      (error) {
+        emit(WeatherForecastError(error));
+      },
+      (location) async {
+        final params = Params(
+          lat: location.latitude,
+          lon: location.longitude,
+          units: units,
+        );
+        final result = await _getForecastWeather(params);
+        result.fold(
+          (failure) => emit(WeatherForecastError(mapFailureToMessage(failure))),
+          (forecast) => emit(WeatherForecastLoaded(forecast)),
         );
       },
     );

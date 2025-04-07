@@ -5,6 +5,7 @@ import '../../core/services/location_services.dart';
 import '../../features/weather/data/datasources/weather_datasource.dart';
 import '../../features/weather/data/repositories/weather_repo_impl.dart';
 import '../../features/weather/domain/usecases/get_current_weather_usecase.dart';
+import '../../features/weather/domain/usecases/get_forecast_usecase.dart';
 import '../../features/weather/presentation/cubit/weather_cubit.dart';
 import 'injector.dart';
 
@@ -29,10 +30,14 @@ void configureDependencies() {
     ..registerLazySingleton(
       () => GetCurrentWeatherUsecase(getIt<WeatherRepositoryImpl>()),
     )
+    ..registerLazySingleton(
+      () => GetForecastUseCase(getIt<WeatherRepositoryImpl>()),
+    )
     ..registerLazySingleton(LocationServices.new)
     ..registerLazySingleton(
       () => WeatherCubit(
         getIt<GetCurrentWeatherUsecase>(),
+        getIt<GetForecastUseCase>(),
         getIt<LocationServices>(),
       ),
     );

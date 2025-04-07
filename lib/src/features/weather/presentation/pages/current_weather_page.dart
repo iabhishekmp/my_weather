@@ -18,6 +18,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
   void initState() {
     super.initState();
     context.read<WeatherCubit>().getCurrentWeather(units: 'metric');
+    context.read<WeatherCubit>().getForecastWeather(units: 'metric');
   }
 
   @override
