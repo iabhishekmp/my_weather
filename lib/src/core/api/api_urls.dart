@@ -8,4 +8,10 @@ class ApiUrls {
 
   static String iconUrl(String icon) =>
       'https://openweathermap.org/img/wn/$icon@2x.png';
+
+  static String weatherMap1Url(String mapType, int z, int x, int y) =>
+      'https://tile.openweathermap.org/map/$mapType/$z/$x/$y.png?appid=${const String.fromEnvironment('API_KEY')}';
+
+  static String weatherMap2Url(String op, int z, int x, int y) =>
+      'http://maps.openweathermap.org/maps/2.0/weather/$op/$z/$x/$y?appid=${const String.fromEnvironment('API_KEY')}';
 }

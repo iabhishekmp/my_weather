@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../../core/api/api_urls.dart';
 import '../../domain/entities/weather_entity.dart';
 
 class MapPage extends StatefulWidget {
@@ -43,15 +45,48 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
       body: GoogleMap(
         initialCameraPosition: initialCameraPosition,
         markers: markers,
+        myLocationEnabled: true,
+        tileOverlays: {
+          TileOverlay(
+            tileOverlayId: const TileOverlayId('tile_overlay_id'),
+            tileProvider: ForecastTileProvider(mapType: 'temp_new'),
+          ),
+        },
       ),
     );
   }
+}
+
+class ForecastTileProvider implements TileProvider {
+  final String mapType;
+  int tileSize = 16;
+
+  ForecastTileProvider({required this.mapType});
+
+  @override
+  Future<Tile> getTile(int x, int y, int? zoom) async {
+    var tileBytes = Uint8List(0);
+    try {
+      final url = ApiUrls.weatherMap1Url(mapType, zoom ?? 0, x, y);
+      if (TilesCache.tiles.containsKey(url)) {
+        tileBytes = TilesCache.tiles[url]!;
+      } else {
+        final uri = Uri.parse(url);
+
+        final imageData = await NetworkAssetBundle(uri).load('');
+        tileBytes = imageData.buffer.asUint8List();
+        TilesCache.tiles[url] = tileBytes;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return Tile(tileSize, tileSize, tileBytes);
+  }
+}
+
+class TilesCache {
+  static Map<String, Uint8List> tiles = {};
 }
