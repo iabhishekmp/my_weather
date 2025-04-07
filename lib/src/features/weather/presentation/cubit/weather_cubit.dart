@@ -19,14 +19,14 @@ class WeatherCubit extends Cubit<WeatherState> {
     this._getCurrentWeather,
     this._getForecastWeather,
     this._locationServices,
-  ) : super(WeatherInitial());
+  ) : super(const WeatherState(isLoading: false));
 
   Future<void> getCurrentWeather({required String units}) async {
-    emit(WeatherLoading());
+    emit(state.copyWith(isLoading: true));
     final result = await _locationServices.getCurrentLocation();
     return result.fold(
       (error) {
-        emit(WeatherError(error));
+        emit(state.copyWith(isLoading: false, error: error));
       },
       (location) async {
         final params = Params(
@@ -36,19 +36,24 @@ class WeatherCubit extends Cubit<WeatherState> {
         );
         final result = await _getCurrentWeather(params);
         result.fold(
-          (failure) => emit(WeatherError(mapFailureToMessage(failure))),
-          (weather) => emit(WeatherLoaded(weather)),
+          (failure) => emit(
+            state.copyWith(
+              isLoading: false,
+              error: mapFailureToMessage(failure),
+            ),
+          ),
+          (weather) => emit(WeatherState(isLoading: false, weather: weather)),
         );
       },
     );
   }
 
   Future<void> getForecastWeather({required String units}) async {
-    emit(WeatherForecastLoading());
+    emit(state.copyWith(isLoading: true));
     final result = await _locationServices.getCurrentLocation();
     return result.fold(
       (error) {
-        emit(WeatherForecastError(error));
+        emit(state.copyWith(isLoading: false, error: error));
       },
       (location) async {
         final params = Params(
@@ -58,8 +63,14 @@ class WeatherCubit extends Cubit<WeatherState> {
         );
         final result = await _getForecastWeather(params);
         result.fold(
-          (failure) => emit(WeatherForecastError(mapFailureToMessage(failure))),
-          (forecast) => emit(WeatherForecastLoaded(forecast)),
+          (failure) => emit(
+            state.copyWith(
+              isLoading: false,
+              error: mapFailureToMessage(failure),
+            ),
+          ),
+          (forecast) =>
+              emit(state.copyWith(isLoading: false, forecast: forecast)),
         );
       },
     );

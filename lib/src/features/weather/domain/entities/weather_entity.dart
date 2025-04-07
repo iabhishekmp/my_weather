@@ -117,6 +117,9 @@ class WeatherEntity extends Equatable {
     name,
     cod,
   ];
+
+  @override
+  bool get stringify => true;
 }
 
 class Clouds {

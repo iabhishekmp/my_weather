@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
@@ -5,12 +7,28 @@ import 'package:geolocator/geolocator.dart';
 import '../utils/logger.dart';
 
 class LocationServices {
+  Position? position;
+  DateTime _lastFetchedTime = DateTime.now();
+  Completer<Either<String, Position>>? _completer;
+
   Future<Either<String, Position>> getCurrentLocation() async {
+    if (position != null &&
+        DateTime.now().difference(_lastFetchedTime).inSeconds < 300) {
+      return Right(position!);
+    }
+
+    if (_completer != null) {
+      return _completer!.future;
+    }
+    _completer = Completer<Either<String, Position>>();
+
     try {
       final isLocationServiceEnabled =
           await Geolocator.isLocationServiceEnabled();
       if (!isLocationServiceEnabled) {
-        return const Left('Location services are disabled.');
+        const msg = 'Location services are disabled.';
+        _completer!.complete(const Left(msg));
+        return const Left(msg);
       }
 
       // Check and request location permissions
@@ -18,22 +36,30 @@ class LocationServices {
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          return const Left('Location permissions are denied.');
+          const msg = 'Location permissions are denied.';
+          _completer!.complete(const Left(msg));
+          return const Left(msg);
         }
       }
 
       if (permission == LocationPermission.deniedForever) {
-        return const Left(
-          'Location permission is permanently denied. Please enable them in settings.',
-        );
+        const msg =
+            '''Location permissions are permanently denied. Please enable them in settings.''';
+        _completer!.complete(const Left(msg));
+        return const Left(msg);
       }
 
-      return Right(
-        await Geolocator.getCurrentPosition(locationSettings: _getSettings()),
+      position = await Geolocator.getCurrentPosition(
+        locationSettings: _getSettings(),
       );
+      _lastFetchedTime = DateTime.now();
+      _completer!.complete(Right(position!));
+      return Right(position!);
     } on Exception catch (e, st) {
       logger.e(e, stackTrace: st);
-      return Left('Failed to get current location: $e');
+      final msg = 'Failed to get current location: $e';
+      _completer!.complete(Left(msg));
+      return Left(msg);
     }
   }
 

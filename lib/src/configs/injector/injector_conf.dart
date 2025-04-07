@@ -14,12 +14,13 @@ final getIt = GetIt.instance;
 void configureDependencies() {
   getIt
     ..registerLazySingleton(ApiInterceptor.new)
+    ..registerLazySingleton(MyLogInterceptor.new)
     ..registerLazySingleton(
       () =>
           Dio()
             ..interceptors.addAll([
               getIt<ApiInterceptor>(),
-              LogInterceptor(requestBody: true, responseBody: true),
+              getIt<MyLogInterceptor>(),
             ]),
     )
     ..registerLazySingleton(() => ApiHelper(getIt<Dio>()))

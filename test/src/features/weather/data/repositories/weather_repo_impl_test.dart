@@ -58,7 +58,7 @@ void main() {
     );
 
     test(
-      'should return TooManyRequestsFailure when data source throws TooManyRequestsException',
+      '''should return TooManyRequestsFailure when data source throws TooManyRequestsException''',
       () async {
         // arrange
         final tModel = GetWeatherModel(
@@ -81,7 +81,7 @@ void main() {
     );
 
     test(
-      'should return ServerFailure when data source throws an unknown exception',
+      '''should return ServerFailure when data source throws an unknown exception''',
       () async {
         // arrange
         final tModel = GetWeatherModel(
@@ -127,7 +127,7 @@ void main() {
     );
 
     test(
-      'should return TooManyRequestsFailure when data source throws TooManyRequestsException',
+      '''should return TooManyRequestsFailure when data source throws TooManyRequestsException''',
       () async {
         // arrange
         final tModel = GetWeatherModel(
@@ -150,7 +150,7 @@ void main() {
     );
 
     test(
-      'should return ServerFailure when data source throws an unknown exception',
+      '''should return ServerFailure when data source throws an unknown exception''',
       () async {
         // arrange
         final tModel = GetWeatherModel(

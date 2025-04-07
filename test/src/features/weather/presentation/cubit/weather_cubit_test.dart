@@ -55,11 +55,11 @@ void main() {
   });
 
   test('initial state is WeatherInitial', () {
-    expect(weatherCubit.state, WeatherInitial());
+    expect(weatherCubit.state, const WeatherState(isLoading: false));
   });
 
   blocTest<WeatherCubit, WeatherState>(
-    'emits [WeatherLoading, WeatherLoaded] when weather data is fetched successfully',
+    '''emits [WeatherLoading, WeatherLoaded] when weather data is fetched successfully''',
     build: () {
       when(
         mockLocationServices.getCurrentLocation(),
@@ -70,7 +70,11 @@ void main() {
       return weatherCubit;
     },
     act: (cubit) => cubit.getCurrentWeather(units: 'metric'),
-    expect: () => [WeatherLoading(), const WeatherLoaded(tWeatherEntity)],
+    expect:
+        () => [
+          const WeatherState(isLoading: true),
+          const WeatherState(isLoading: false, weather: tWeatherEntity),
+        ],
   );
 
   blocTest<WeatherCubit, WeatherState>(
@@ -84,8 +88,11 @@ void main() {
     act: (cubit) => cubit.getCurrentWeather(units: 'metric'),
     expect:
         () => [
-          WeatherLoading(),
-          const WeatherError('Location services are disabled.'),
+          const WeatherState(isLoading: true),
+          const WeatherState(
+            isLoading: false,
+            error: 'Location services are disabled.',
+          ),
         ],
   );
 
@@ -103,13 +110,16 @@ void main() {
     act: (cubit) => cubit.getCurrentWeather(units: 'metric'),
     expect:
         () => [
-          WeatherLoading(),
-          const WeatherError('Server Failure: Test Failure'),
+          const WeatherState(isLoading: true),
+          const WeatherState(
+            isLoading: false,
+            error: 'Server Failure: Test Failure',
+          ),
         ],
   );
 
   blocTest<WeatherCubit, WeatherState>(
-    'emits [WeatherForecastLoading, WeatherForecastLoaded] when forecast data is fetched successfully',
+    '''emits [WeatherForecastLoading, WeatherForecastLoaded] when forecast data is fetched successfully''',
     build: () {
       when(
         mockLocationServices.getCurrentLocation(),
@@ -122,13 +132,13 @@ void main() {
     act: (cubit) => cubit.getForecastWeather(units: 'metric'),
     expect:
         () => [
-          WeatherForecastLoading(),
-          const WeatherForecastLoaded(tForecastEntity),
+          const WeatherState(isLoading: true),
+          const WeatherState(isLoading: false, forecast: tForecastEntity),
         ],
   );
 
   blocTest<WeatherCubit, WeatherState>(
-    'emits [WeatherForecastLoading, WeatherForecastError] when forecast fetching fails',
+    '''emits [WeatherForecastLoading, WeatherForecastError] when forecast fetching fails''',
     build: () {
       when(
         mockLocationServices.getCurrentLocation(),
@@ -141,13 +151,16 @@ void main() {
     act: (cubit) => cubit.getForecastWeather(units: 'metric'),
     expect:
         () => [
-          WeatherForecastLoading(),
-          const WeatherForecastError('Server Failure: Test Failure'),
+          const WeatherState(isLoading: true),
+          const WeatherState(
+            isLoading: false,
+            error: 'Server Failure: Test Failure',
+          ),
         ],
   );
 
   blocTest<WeatherCubit, WeatherState>(
-    'emits [WeatherForecastLoading, WeatherForecastError] when location fetching fails',
+    '''emits [WeatherForecastLoading, WeatherForecastError] when location fetching fails''',
     build: () {
       when(
         mockLocationServices.getCurrentLocation(),
@@ -157,8 +170,11 @@ void main() {
     act: (cubit) => cubit.getForecastWeather(units: 'metric'),
     expect:
         () => [
-          WeatherForecastLoading(),
-          const WeatherForecastError('Location services are disabled.'),
+          const WeatherState(isLoading: true),
+          const WeatherState(
+            isLoading: false,
+            error: 'Location services are disabled.',
+          ),
         ],
   );
 }
