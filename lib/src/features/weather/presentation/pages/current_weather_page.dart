@@ -117,42 +117,48 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        //? icon
-                        Image.network(ApiUrls.iconUrl(icon), height: 100),
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              //? icon
+                              Image.network(ApiUrls.iconUrl(icon), height: 100),
 
-                        //? temperature
-                        Text(
-                          '$temp°',
-                          style: const TextStyle(
-                            fontSize: 64,
-                            fontWeight: FontWeight.w300,
-                            color: Colors.white,
+                              //? temperature
+                              Text(
+                                '$temp°',
+                                style: const TextStyle(
+                                  fontSize: 64,
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.white,
+                                ),
+                              ),
+
+                              //? min and max temperature
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  _WeatherTile(
+                                    icon: Icons.thermostat,
+                                    label: 'Min',
+                                    value: '$minTemp°',
+                                  ),
+                                  const SizedBox(width: 32),
+                                  _WeatherTile(
+                                    icon: Icons.thermostat_outlined,
+                                    label: 'Max',
+                                    value: '$maxTemp°',
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ),
-
-                        //? min and max temperature
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _WeatherTile(
-                              icon: Icons.thermostat,
-                              label: 'Min',
-                              value: '$minTemp°',
-                            ),
-                            const SizedBox(width: 32),
-                            _WeatherTile(
-                              icon: Icons.thermostat_outlined,
-                              label: 'Max',
-                              value: '$maxTemp°',
-                            ),
-                          ],
                         ),
 
                         //? Forecast
                         if (forecast != null) ...[
-                          const SizedBox(height: 20),
-                          const Divider(color: Colors.white30),
-                          const SizedBox(height: 10),
+                          const Divider(color: Colors.white30, thickness: 1),
                           Expanded(
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
@@ -173,6 +179,8 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
                                     horizontal: 12,
                                   ),
                                   child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
                                         DateFormat('EEE').format(forecastTime),
@@ -211,11 +219,11 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
                               },
                             ),
                           ),
+                          const Divider(color: Colors.white30, thickness: 1),
                         ],
                       ],
                     ),
                   ),
-                  const SizedBox(height: 32),
 
                   //? weather details
                   Row(
