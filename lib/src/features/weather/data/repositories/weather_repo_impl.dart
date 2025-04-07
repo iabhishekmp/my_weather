@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 
 import '../../../../core/api/api_exceptions.dart';
 import '../../../../core/errors/failures.dart';
+import '../../../../core/utils/logger.dart';
 import '../../domain/entities/weather_entity.dart';
 import '../../domain/repositories/weather_repo.dart';
 import '../../domain/usecases/usecase_params.dart';
@@ -27,10 +28,12 @@ class WeatherRepositoryImpl extends WeatherRepository {
       return Right(res);
     } on TooManyRequestsException {
       return Left(TooManyRequestsFailure());
-    } on Exception catch (_) {
-      return Left(ServerFailure());
-    } catch (_) {
-      return Left(SomethingWrong());
+    } on Exception catch (e, st) {
+      logger.e(e, stackTrace: st);
+      return Left(ServerFailure(message: e.toString()));
+    } catch (e, st) {
+      logger.e(e, stackTrace: st);
+      return Left(SomethingWrong(message: 'Something went wrong: $e'));
     }
   }
 }

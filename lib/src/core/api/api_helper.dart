@@ -12,14 +12,18 @@ class ApiHelper {
     Map<String, dynamic>? queryParameters,
     dynamic data,
   }) async {
-    Response<dynamic>? response;
-    switch (method) {
-      case Method.get:
-        response = await _dio.get(url, queryParameters: queryParameters);
-      case Method.post:
-        response = await _dio.post(url, data: data);
+    try {
+      Response<dynamic>? response;
+      switch (method) {
+        case Method.get:
+          response = await _dio.get(url, queryParameters: queryParameters);
+        case Method.post:
+          response = await _dio.post(url, data: data);
+      }
+      return _returnResponse(response);
+    } on DioException catch (e) {
+      return _returnResponse(e.response!);
     }
-    return _returnResponse(response);
   }
 
   Map<String, dynamic> _returnResponse(Response<dynamic> response) {
