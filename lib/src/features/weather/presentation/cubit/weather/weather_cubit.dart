@@ -1,5 +1,7 @@
+import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../../../../../core/errors/failures.dart';
 import '../../../../../core/services/location_services.dart';
@@ -22,9 +24,14 @@ class WeatherCubit extends Cubit<WeatherState> {
     this._locationServices,
   ) : super(const WeatherState(isLoading: false));
 
-  Future<void> getCurrentWeather({required String units}) async {
+  Future<void> fetchWeather({required String units, Position? position}) async {
     emit(state.copyWith(isLoading: true));
-    final result = await _locationServices.getCurrentLocation();
+    Either<String, Position> result;
+    if (position != null) {
+      result = Right(position);
+    } else {
+      result = await _locationServices.getCurrentLocation();
+    }
     return result.fold(
       (error) {
         emit(state.copyWith(isLoading: false, error: error));
@@ -49,9 +56,17 @@ class WeatherCubit extends Cubit<WeatherState> {
     );
   }
 
-  Future<void> getForecastWeather({required String units}) async {
+  Future<void> fetchForecast({
+    required String units,
+    Position? position,
+  }) async {
     emit(state.copyWith(isLoading: true));
-    final result = await _locationServices.getCurrentLocation();
+    Either<String, Position> result;
+    if (position != null) {
+      result = Right(position);
+    } else {
+      result = await _locationServices.getCurrentLocation();
+    }
     return result.fold(
       (error) {
         emit(state.copyWith(isLoading: false, error: error));

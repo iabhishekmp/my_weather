@@ -37,7 +37,7 @@ void configureDependencies() {
       () => GetForecastUseCase(getIt<WeatherRepositoryImpl>()),
     )
     ..registerLazySingleton(LocationServices.new)
-    ..registerLazySingleton(
+    ..registerFactory(
       () => WeatherCubit(
         getIt<GetCurrentWeatherUsecase>(),
         getIt<GetForecastUseCase>(),

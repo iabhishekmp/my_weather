@@ -69,7 +69,7 @@ void main() {
       ).thenAnswer((_) async => const Right(tWeatherEntity));
       return weatherCubit;
     },
-    act: (cubit) => cubit.getCurrentWeather(units: 'metric'),
+    act: (cubit) => cubit.fetchWeather(units: 'metric'),
     expect:
         () => [
           const WeatherState(isLoading: true),
@@ -85,7 +85,7 @@ void main() {
       ).thenAnswer((_) async => const Left('Location services are disabled.'));
       return weatherCubit;
     },
-    act: (cubit) => cubit.getCurrentWeather(units: 'metric'),
+    act: (cubit) => cubit.fetchWeather(units: 'metric'),
     expect:
         () => [
           const WeatherState(isLoading: true),
@@ -107,7 +107,7 @@ void main() {
       ).thenAnswer((_) async => Left(ServerFailure(message: 'Test Failure')));
       return weatherCubit;
     },
-    act: (cubit) => cubit.getCurrentWeather(units: 'metric'),
+    act: (cubit) => cubit.fetchWeather(units: 'metric'),
     expect:
         () => [
           const WeatherState(isLoading: true),
@@ -129,7 +129,7 @@ void main() {
       ).thenAnswer((_) async => const Right(tForecastEntity));
       return weatherCubit;
     },
-    act: (cubit) => cubit.getForecastWeather(units: 'metric'),
+    act: (cubit) => cubit.fetchForecast(units: 'metric'),
     expect:
         () => [
           const WeatherState(isLoading: true),
@@ -148,7 +148,7 @@ void main() {
       ).thenAnswer((_) async => Left(ServerFailure(message: 'Test Failure')));
       return weatherCubit;
     },
-    act: (cubit) => cubit.getForecastWeather(units: 'metric'),
+    act: (cubit) => cubit.fetchForecast(units: 'metric'),
     expect:
         () => [
           const WeatherState(isLoading: true),
@@ -167,7 +167,7 @@ void main() {
       ).thenAnswer((_) async => const Left('Location services are disabled.'));
       return weatherCubit;
     },
-    act: (cubit) => cubit.getForecastWeather(units: 'metric'),
+    act: (cubit) => cubit.fetchForecast(units: 'metric'),
     expect:
         () => [
           const WeatherState(isLoading: true),

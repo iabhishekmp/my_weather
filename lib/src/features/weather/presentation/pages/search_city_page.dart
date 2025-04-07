@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 
+import '../../../../configs/injector/injector_conf.dart';
 import '../cubit/geo_city/geo_city_cubit.dart';
+import '../cubit/weather/weather_cubit.dart';
+import 'weather_data_page.dart';
 
 class SearchCityPage extends StatelessWidget {
   const SearchCityPage({super.key});
@@ -73,7 +77,31 @@ class SearchCityPage extends StatelessWidget {
                           '${city.country}, ${city.state}',
                           style: const TextStyle(color: Colors.white54),
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder:
+                                  (context) => BlocProvider(
+                                    create: (context) => getIt<WeatherCubit>(),
+                                    child: WeatherDataPage(
+                                      position: Position(
+                                        longitude: city.lon,
+                                        latitude: city.lat,
+                                        timestamp: DateTime.now(),
+                                        accuracy: 0,
+                                        altitude: 0,
+                                        altitudeAccuracy: 0,
+                                        heading: 0,
+                                        headingAccuracy: 0,
+                                        speed: 0,
+                                        speedAccuracy: 0,
+                                      ),
+                                    ),
+                                  ),
+                            ),
+                          );
+                        },
                       );
                     },
                   );
