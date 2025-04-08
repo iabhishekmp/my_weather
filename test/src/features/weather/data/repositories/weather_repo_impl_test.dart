@@ -95,7 +95,10 @@ void main() {
         final result = await repository.getCurrentWeather(tParams);
 
         // assert
-        expect(result, Left<Failure, WeatherEntity>(ServerFailure()));
+        expect(
+          result,
+          Left<Failure, WeatherEntity>(ServerFailure(message: 'Exception')),
+        );
         verify(mockDataSource.getCurrentWeather(tModel));
         verifyNoMoreInteractions(mockDataSource);
       },

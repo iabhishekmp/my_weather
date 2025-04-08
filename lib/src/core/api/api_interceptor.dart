@@ -10,7 +10,7 @@ class ApiInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     options
-      ..baseUrl = ApiUrls.localUrl
+      ..baseUrl = ApiUrls.baseUrl
       ..queryParameters = {'appid': Env.apiKey, ...options.queryParameters};
     super.onRequest(options, handler);
   }
