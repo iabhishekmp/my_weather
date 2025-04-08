@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 
+import '../../configs/env.dart';
 import '../utils/logger.dart';
 import 'api_urls.dart';
 
@@ -10,10 +11,7 @@ class ApiInterceptor extends Interceptor {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     options
       ..baseUrl = ApiUrls.localUrl
-      ..queryParameters = {
-        'appid': const String.fromEnvironment('API_KEY'),
-        ...options.queryParameters,
-      };
+      ..queryParameters = {'appid': Env.apiKey, ...options.queryParameters};
     super.onRequest(options, handler);
   }
 }
